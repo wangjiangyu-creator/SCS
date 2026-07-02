@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import { claimantProfiles } from "../data/site";
+---
+
+<BaseLayout title="Introduction">
+  <PageLead
+    eyebrow="General introduction"
+    title="The South China Sea disputes combine territorial sovereignty, maritime entitlements, resources, and regional order."
+    text="The South China Sea is a semi-enclosed sea bordered by China, Taiwan, Vietnam, the Philippines, Malaysia, Brunei, and Indonesia. The disputes are legally complex because claims to land features, maritime zones, historic rights, continental shelves, fisheries, and navigation operate under different bodies of law."
+  />
+
+  <section class="content-grid">
+    <article class="text-panel wide">
+      <h2>Why the disputes matter</h2>
+      <p>
+        The South China Sea contains major sea lanes linking Northeast Asia, Southeast Asia, the Indian
+        Ocean, and global markets. It is also a dense fisheries zone, a possible hydrocarbon province,
+        and a stage for naval, coast guard, and maritime militia activity. Legal arguments are therefore
+        inseparable from policy choices about deterrence, crisis management, resource access, and the
+        credibility of international adjudication.
+      </p>
+      <p>
+        A first-order distinction is essential: sovereignty over land territory is not the same question
+        as maritime entitlement. UNCLOS governs maritime zones, but it does not decide which state owns
+        a disputed island or rock. The 2016 South China Sea Arbitration was structured around that
+        distinction and did not delimit a boundary or award sovereignty over territory.
+      </p>
+    </article>
+    <aside class="note-panel">
+      <h2>Core legal vocabulary</h2>
+      <ul>
+        <li>Territorial sea: up to 12 nautical miles from lawful baselines.</li>
+        <li>EEZ: sovereign rights over resources up to 200 nautical miles.</li>
+        <li>Continental shelf: seabed and subsoil rights, potentially beyond 200 nautical miles.</li>
+        <li>Low-tide elevation: no territorial sea of its own unless within another territorial sea.</li>
+        <li>Article 121 rock: may generate a territorial sea, but not an EEZ or continental shelf.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Claimant matrix</p>
+      <h2>Who claims what</h2>
+    </div>
+    <div class="matrix">
+      {claimantProfiles.map((claimant) => (
+        <article id={claimant.name.toLowerCase().replaceAll("/", "-").replaceAll(" ", "-")} class="matrix-row">
+          <div>
+            <strong>{claimant.name}</strong>
+            <span>{claimant.role}</span>
+          </div>
+          <p>{claimant.claim}</p>
+          <ul>
+            {claimant.keyAreas.map((area) => <li>{area}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+

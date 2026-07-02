@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+import { legalFrameworks } from "../data/site";
+
+const lawSources = sources.filter((source) =>
+  ["Treaty", "Procedural Rules", "National Law", "Regional Instrument", "CLCS Submission"].includes(source.sourceType)
+);
+---
+
+<BaseLayout title="Law">
+  <PageLead
+    eyebrow="Legal framework"
+    title="UNCLOS is the core framework, but national laws and regional instruments shape the dispute in practice."
+    text="The legal materials on this page separate international rules, adjudicatory procedure, regional commitments, and domestic maritime legislation."
+  />
+
+  <section class="framework-grid">
+    {legalFrameworks.map((framework) => (
+      <article class="brief-card">
+        <h2>{framework.title}</h2>
+        <p>{framework.text}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Legal source set</p>
+      <h2>Treaties, procedural rules, national laws, and CLCS materials</h2>
+    </div>
+    <ResourceExplorer resources={lawSources} />
+  </section>
+</BaseLayout>
+

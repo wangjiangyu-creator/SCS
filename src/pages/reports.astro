@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+
+const reportSources = sources.filter((source) =>
+  source.sourceType.includes("Report") ||
+  source.sourceType.includes("Analysis") ||
+  source.sourceType.includes("Publication") ||
+  source.sourceType.includes("Profile") ||
+  source.sourceType.includes("Resource") ||
+  source.sourceType.includes("Data/Map")
+);
+---
+
+<BaseLayout title="Reports and Publications">
+  <PageLead
+    eyebrow="Research base"
+    title="Government reports, international and NGO materials, think tank work, and academic publications."
+    text="This page collects interpretive sources separately from primary law and arbitration materials while preserving links back to the searchable full library."
+  />
+
+  <section class="content-grid">
+    <article class="text-panel">
+      <h2>How to read the secondary literature</h2>
+      <p>
+        Reports and academic publications often disagree on whether the dispute is primarily a legal,
+        strategic, resource, or crisis-management problem. The library preserves that plurality rather
+        than forcing a single narrative.
+      </p>
+      <p>
+        The most useful research path is comparative: start with official statements and legal instruments,
+        then read regional profiles, incident trackers, and academic treatments of historic rights,
+        island status, and coercive maritime conduct.
+      </p>
+    </article>
+    <aside class="note-panel">
+      <h2>Included categories</h2>
+      <ul>
+        <li>Government and defense reports</li>
+        <li>International organization and regional documents</li>
+        <li>NGO and conflict-prevention reports</li>
+        <li>Think tank data trackers and maps</li>
+        <li>Academic articles and working papers</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Reports and publications</p>
+      <h2>Search interpretive sources</h2>
+    </div>
+    <ResourceExplorer resources={reportSources} />
+  </section>
+</BaseLayout>
+

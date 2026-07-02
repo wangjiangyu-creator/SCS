@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import { issueAreas } from "../data/site";
+---
+
+<BaseLayout title="Main Issues">
+  <PageLead
+    eyebrow="Issue architecture"
+    title="The dispute is best understood as several overlapping legal and policy problems."
+    text="Sovereignty, maritime entitlement, navigation, resource governance, and crisis management are related, but they should not be collapsed into a single question."
+  />
+
+  <section class="issue-deep-list">
+    {issueAreas.map((issue, index) => (
+      <article class="issue-deep-card">
+        <div class="issue-number">{String(index + 1).padStart(2, "0")}</div>
+        <div>
+          <span>{issue.tag}</span>
+          <h2>{issue.title}</h2>
+          <p>{issue.summary}</p>
+          <h3>Key research questions</h3>
+          <ul>
+            {issue.questions.map((question) => <li>{question}</li>)}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
+

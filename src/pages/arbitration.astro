@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+import { arbitrationFindings } from "../data/site";
+
+const arbitrationSources = sources.filter((source) => source.topics.includes("Arbitration"));
+---
+
+<BaseLayout title="South China Sea Arbitration">
+  <PageLead
+    eyebrow="PCA Case No. 2013-19"
+    title="The Philippines v. China arbitration clarified maritime entitlements without deciding sovereignty."
+    text="The case was brought under UNCLOS Annex VII. China did not participate, but the tribunal proceeded while addressing jurisdiction, admissibility, and factual support."
+  />
+
+  <section class="timeline">
+    <article>
+      <span>2013</span>
+      <h2>Philippines initiates arbitration</h2>
+      <p>The Philippines commenced UNCLOS Annex VII proceedings seeking declarations on maritime entitlements, historic rights, and Chinese conduct.</p>
+    </article>
+    <article>
+      <span>2014</span>
+      <h2>China issues position paper</h2>
+      <p>China rejected participation and argued that the tribunal lacked jurisdiction because the dispute concerned sovereignty and maritime delimitation.</p>
+    </article>
+    <article>
+      <span>2015</span>
+      <h2>Jurisdiction award</h2>
+      <p>The tribunal accepted jurisdiction over several submissions and reserved others for the merits phase.</p>
+    </article>
+    <article>
+      <span>2016</span>
+      <h2>Final award</h2>
+      <p>The tribunal ruled on historic rights, feature status, Philippine sovereign rights, environmental duties, and safety at sea.</p>
+    </article>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Findings</p>
+      <h2>What the award did and did not decide</h2>
+    </div>
+    <div class="finding-list">
+      {arbitrationFindings.map((finding) => (
+        <article>
+          <h3>{finding.title}</h3>
+          <p>{finding.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Arbitration sources</p>
+      <h2>Awards, statements, trackers, and analysis</h2>
+    </div>
+    <ResourceExplorer resources={arbitrationSources} />
+  </section>
+</BaseLayout>
+

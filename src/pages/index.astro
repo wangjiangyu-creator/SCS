@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+import { arbitrationFindings, claimantProfiles, issueAreas, mapImage } from "../data/site";
+
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const primaryCount = sources.filter((source) => source.primarySource).length;
+const compactSources = sources.slice(0, 9);
+---
+
+<BaseLayout>
+  <section class="dashboard-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Briefing dashboard</p>
+      <h1>South China Sea disputes: law, policy, and geopolitical risk in one research portal.</h1>
+      <p>
+        A neutral guide to competing claims, UNCLOS rules, national laws, the 2016 arbitration,
+        government reports, NGO analysis, and academic literature.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href={`${base}library/`}>Search sources</a>
+        <a class="button secondary" href={`${base}introduction/`}>Start with claims</a>
+      </div>
+    </div>
+    <figure class="map-panel">
+      <img src={mapImage.src} alt={mapImage.alt} loading="eager" />
+      <figcaption>{mapImage.credit}</figcaption>
+    </figure>
+  </section>
+
+  <section class="metric-row" aria-label="Portal coverage">
+    <div>
+      <strong>{sources.length}</strong>
+      <span>verified source records</span>
+    </div>
+    <div>
+      <strong>{primaryCount}</strong>
+      <span>primary or official sources</span>
+    </div>
+    <div>
+      <strong>7</strong>
+      <span>claimants and stakeholders profiled</span>
+    </div>
+    <div>
+      <strong>5</strong>
+      <span>core issue clusters</span>
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Main issue map</p>
+      <h2>What the dispute is really about</h2>
+      <a href={`${base}issues/`}>View issue analysis</a>
+    </div>
+    <div class="issue-grid">
+      {issueAreas.map((issue) => (
+        <article class="brief-card">
+          <span>{issue.tag}</span>
+          <h3>{issue.title}</h3>
+          <p>{issue.summary}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band split-section">
+    <div>
+      <p class="eyebrow">Claimants</p>
+      <h2>Competing claims and affected interests</h2>
+      <p>
+        The dispute involves overlapping sovereignty claims to features and overlapping maritime-zone
+        claims. Indonesia is tracked as an affected coastal state because the Natuna-area issue is primarily
+        about EEZ and continental shelf rights, not Spratly or Paracel sovereignty.
+      </p>
+      <a class="inline-link" href={`${base}claimants/`}>Compare claimant profiles</a>
+    </div>
+    <div class="claimant-strip">
+      {claimantProfiles.map((claimant) => (
+        <a href={`${base}claimants/#${claimant.name.toLowerCase().replaceAll("/", "-").replaceAll(" ", "-")}`} class={`claimant-pill ${claimant.color}`}>
+          {claimant.name}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">2016 arbitration</p>
+      <h2>The award is central, but not the whole dispute</h2>
+      <a href={`${base}arbitration/`}>Read arbitration guide</a>
+    </div>
+    <div class="finding-list">
+      {arbitrationFindings.slice(0, 4).map((finding) => (
+        <article>
+          <h3>{finding.title}</h3>
+          <p>{finding.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Source library</p>
+      <h2>Search a seeded research base</h2>
+      <a href={`${base}library/`}>Open full library</a>
+    </div>
+    <ResourceExplorer resources={compactSources} compact />
+  </section>
+</BaseLayout>

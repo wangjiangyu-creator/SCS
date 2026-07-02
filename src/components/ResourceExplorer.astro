@@ -1,0 +1,162 @@
+---
+interface SourceRecord {
+  id: string;
+  title: string;
+  authors: string[];
+  year: number;
+  sourceType: string;
+  issuer: string;
+  claimants: string[];
+  topics: string[];
+  jurisdiction: string;
+  url: string;
+  summary: string;
+  primarySource: boolean;
+  accessed: string;
+}
+
+interface Props {
+  resources: SourceRecord[];
+  compact?: boolean;
+}
+
+const { resources, compact = false } = Astro.props;
+const sourceTypes = [...new Set(resources.map((resource) => resource.sourceType))].sort();
+const claimants = [...new Set(resources.flatMap((resource) => resource.claimants))].sort();
+const topics = [...new Set(resources.flatMap((resource) => resource.topics))].sort();
+const years = [...new Set(resources.map((resource) => resource.year))].sort((a, b) => b - a);
+---
+
+<section class={`resource-explorer ${compact ? "resource-explorer-compact" : ""}`} data-resource-explorer>
+  <div class="toolbar" aria-label="Filter source library">
+    <label>
+      <span>Search</span>
+      <input data-search-input type="search" placeholder="UNCLOS, 2016 Award, China, fisheries..." />
+    </label>
+    <label>
+      <span>Type</span>
+      <select data-filter="type">
+        <option value="">All types</option>
+        {sourceTypes.map((type) => <option value={type}>{type}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Claimant</span>
+      <select data-filter="claimant">
+        <option value="">All claimants</option>
+        {claimants.map((claimant) => <option value={claimant}>{claimant}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Topic</span>
+      <select data-filter="topic">
+        <option value="">All topics</option>
+        {topics.map((topic) => <option value={topic}>{topic}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Year</span>
+      <select data-filter="year">
+        <option value="">All years</option>
+        {years.map((year) => <option value={String(year)}>{year}</option>)}
+      </select>
+    </label>
+  </div>
+
+  <div class="result-meta" aria-live="polite">
+    <strong data-result-count>{resources.length}</strong> sources shown
+  </div>
+
+  <div class="resource-grid">
+    {resources.map((resource) => {
+      const searchText = [
+        resource.title,
+        resource.authors.join(" "),
+        resource.year,
+        resource.sourceType,
+        resource.issuer,
+        resource.claimants.join(" "),
+        resource.topics.join(" "),
+        resource.jurisdiction,
+        resource.summary
+      ].join(" ").toLowerCase();
+
+      return (
+        <article
+          class="resource-card"
+          data-resource-card
+          data-search={searchText}
+          data-type={resource.sourceType}
+          data-claimants={resource.claimants.join("|")}
+          data-topics={resource.topics.join("|")}
+          data-year={String(resource.year)}
+        >
+          <div class="resource-topline">
+            <span>{resource.sourceType}</span>
+            <span>{resource.year}</span>
+          </div>
+          <h3>
+            <a href={resource.url} target="_blank" rel="noreferrer">{resource.title}</a>
+          </h3>
+          <p>{resource.summary}</p>
+          <dl>
+            <div>
+              <dt>Issuer</dt>
+              <dd>{resource.issuer}</dd>
+            </div>
+            <div>
+              <dt>Claimants</dt>
+              <dd>{resource.claimants.join(", ")}</dd>
+            </div>
+            <div>
+              <dt>Topics</dt>
+              <dd>{resource.topics.join(", ")}</dd>
+            </div>
+          </dl>
+          <span class={resource.primarySource ? "source-badge primary" : "source-badge"}>{resource.primarySource ? "Primary source" : "Secondary source"}</span>
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<script>
+  const explorers = document.querySelectorAll("[data-resource-explorer]");
+
+  explorers.forEach((explorer) => {
+    const searchInput = explorer.querySelector("[data-search-input]");
+    const filters = Array.from(explorer.querySelectorAll("[data-filter]"));
+    const cards = Array.from(explorer.querySelectorAll("[data-resource-card]"));
+    const count = explorer.querySelector("[data-result-count]");
+
+    const normalize = (value: unknown) => String(value || "").toLowerCase();
+
+    const update = () => {
+      const query = normalize((searchInput as HTMLInputElement | null)?.value).trim();
+      const selected = Object.fromEntries(
+        filters.map((filter) => [
+          filter.getAttribute("data-filter"),
+          (filter as HTMLSelectElement).value
+        ])
+      );
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const matchesQuery = !query || normalize(card.getAttribute("data-search")).includes(query);
+        const matchesType = !selected.type || card.getAttribute("data-type") === selected.type;
+        const matchesClaimant = !selected.claimant || String(card.getAttribute("data-claimants")).split("|").includes(selected.claimant);
+        const matchesTopic = !selected.topic || String(card.getAttribute("data-topics")).split("|").includes(selected.topic);
+        const matchesYear = !selected.year || card.getAttribute("data-year") === selected.year;
+        const show = matchesQuery && matchesType && matchesClaimant && matchesTopic && matchesYear;
+        card.toggleAttribute("hidden", !show);
+        if (show) visible += 1;
+      });
+
+      if (count) count.textContent = String(visible);
+    };
+
+    searchInput?.addEventListener("input", update);
+    filters.forEach((filter) => filter.addEventListener("change", update));
+    update();
+  });
+</script>

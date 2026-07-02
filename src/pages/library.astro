@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+---
+
+<BaseLayout title="Source Library">
+  <PageLead
+    eyebrow="Searchable library"
+    title="Filter the South China Sea research base by text, source type, claimant, topic, and year."
+    text="The v1 library is seeded with official legal anchors, government materials, regional instruments, reports, data resources, and academic publications. Every record includes a live external source link."
+  />
+
+  <ResourceExplorer resources={sources} />
+</BaseLayout>
+

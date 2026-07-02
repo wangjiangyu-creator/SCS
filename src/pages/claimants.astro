@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+import { claimantProfiles } from "../data/site";
+---
+
+<BaseLayout title="Claimants and Stakeholders">
+  <PageLead
+    eyebrow="Claimant profiles"
+    title="Six claimants, one affected coastal state, and several overlapping legal theories."
+    text="These profiles summarize each claimant's position in neutral terms and distinguish sovereignty claims from maritime-zone interests."
+  />
+
+  <section class="claimant-profile-list">
+    {claimantProfiles.map((claimant) => {
+      const related = sources.filter((source) => source.claimants.includes(claimant.name)).length;
+      return (
+        <article id={claimant.name.toLowerCase().replaceAll("/", "-").replaceAll(" ", "-")} class={`claimant-profile ${claimant.color}`}>
+          <div class="profile-header">
+            <div>
+              <span>{claimant.role}</span>
+              <h2>{claimant.name}</h2>
+            </div>
+            <strong>{related} library records</strong>
+          </div>
+          <p>{claimant.claim}</p>
+          <h3>Key areas</h3>
+          <ul>
+            {claimant.keyAreas.map((area) => <li>{area}</li>)}
+          </ul>
+          <h3>Legal position</h3>
+          <p>{claimant.legalPosition}</p>
+        </article>
+      );
+    })}
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Claimant sources</p>
+      <h2>Filter the library by claimant or stakeholder</h2>
+    </div>
+    <ResourceExplorer resources={sources} compact />
+  </section>
+</BaseLayout>
+
