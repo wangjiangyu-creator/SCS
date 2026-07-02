@@ -4,13 +4,24 @@ import PageLead from "../components/PageLead.astro";
 import ResourceExplorer from "../components/ResourceExplorer.astro";
 import sources from "../data/sources.json";
 
+const publicationTypes = new Set([
+  "Academic Publication",
+  "Book",
+  "Book Chapter",
+  "Journal Article",
+  "Legal Study",
+  "Thesis",
+  "Working Paper"
+]);
+
 const reportSources = sources.filter((source) =>
   source.sourceType.includes("Report") ||
   source.sourceType.includes("Analysis") ||
   source.sourceType.includes("Publication") ||
   source.sourceType.includes("Profile") ||
   source.sourceType.includes("Resource") ||
-  source.sourceType.includes("Data/Map")
+  source.sourceType.includes("Data/Map") ||
+  publicationTypes.has(source.sourceType)
 );
 ---
 
@@ -55,4 +66,3 @@ const reportSources = sources.filter((source) =>
     <ResourceExplorer resources={reportSources} />
   </section>
 </BaseLayout>
-
