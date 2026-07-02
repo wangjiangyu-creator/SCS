@@ -31,8 +31,35 @@ const englishWorks = sortByYearDesc(
 
 const books = literatureSources.filter((source) => source.sourceType === "Book").length;
 const articlesAndPapers = literatureSources.filter((source) =>
-  ["Academic Publication", "Journal Article", "Working Paper", "Legal Study"].includes(source.sourceType)
+  ["Academic Publication", "Book Chapter", "Journal Article", "Working Paper", "Legal Study"].includes(source.sourceType)
 ).length;
+
+const authorIncludes = (source: (typeof sources)[number], names: string[]) =>
+  names.some((name) => source.authors.join(" ").toLowerCase().includes(name.toLowerCase()));
+
+const focusClusters = [
+  {
+    label: "Jiangyu Wang / 王江雨",
+    description: "Scholarship and commentary by Jiangyu Wang on the arbitration, Chinese perspectives, and international-law framing.",
+    items: sortByYearDesc(
+      literatureSources.filter((source) => authorIncludes(source, ["Jiangyu Wang", "王江雨"]))
+    )
+  },
+  {
+    label: "Bingbing Jia",
+    description: "Works by Bingbing Jia on the nine-dash line, Huangyan/Scarborough Shoal, admissibility, and the arbitration.",
+    items: sortByYearDesc(
+      literatureSources.filter((source) => authorIncludes(source, ["Bingbing Jia", "Bing Bing Jia"]))
+    )
+  },
+  {
+    label: "Chinese Journal of International Law",
+    description: "CJIL articles, comments, and special-issue materials central to the legal debate over jurisdiction, admissibility, and the awards.",
+    items: sortByYearDesc(
+      literatureSources.filter((source) => source.issuer === "Chinese Journal of International Law")
+    )
+  }
+];
 ---
 
 <BaseLayout
@@ -60,7 +87,36 @@ const articlesAndPapers = literatureSources.filter((source) =>
     </div>
     <div>
       <strong>{articlesAndPapers}</strong>
-      <span>Articles, papers, and studies</span>
+      <span>Articles, chapters, papers, and studies</span>
+    </div>
+  </section>
+
+  <section class="section-band literature-focus">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Focused clusters</p>
+        <h2>Targeted scholar and journal coverage</h2>
+      </div>
+      <a href={`${import.meta.env.BASE_URL}library/`}>Search all records</a>
+    </div>
+    <div class="focus-grid">
+      {focusClusters.map((cluster) => (
+        <article class="focus-card">
+          <div class="focus-card-topline">
+            <h3>{cluster.label}</h3>
+            <strong>{cluster.items.length}</strong>
+          </div>
+          <p>{cluster.description}</p>
+          <ul>
+            {cluster.items.slice(0, 6).map((item) => (
+              <li>
+                <a href={item.url} target="_blank" rel="noreferrer">{item.title}</a>
+                <span>{item.year}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
     </div>
   </section>
 
