@@ -7,6 +7,7 @@ export const navItems = [
   { href: "claimants/", label: "Claimants" },
   { href: "china/", label: "China" },
   { href: "literature/", label: "Literature" },
+  { href: "lawfare/", label: "Lawfare" },
   { href: "reports/", label: "Reports" },
   { href: "library/", label: "Library" }
 ];

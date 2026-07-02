@@ -1,0 +1,506 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+
+const lawfareSourceIds = new Set([
+  "iseas-lawfare-2023",
+  "guilfoyle-lawfare-rule-of-law-2019",
+  "wirth-schatz-scs-lawfare-2020",
+  "davenport-lowy-lawfare-2022",
+  "blue-security-lawfare-2024",
+  "seo-power-shift-lawfare-2024",
+  "nguyen-tran-lawfulness-lawfare-2025",
+  "marcinskas-us-prc-lawfare-2025",
+  "ajil-prc-gray-zone-lawfare-2022",
+  "hsiao-china-lawfare-2016",
+  "de-castro-philippines-lawfare-2017",
+  "hermez-global-commons-lawfare-2020",
+  "goldenziel-law-battlefield-2021",
+  "ku-mirasola-four-sha-2017",
+  "dutton-vietnam-litigation-lawfare-2020",
+  "ku-opinio-lawfare-deter-china-2014",
+  "liu-opinio-lawfare-over-scs-2016",
+  "pande-fishing-bans-opinio-2022",
+  "demaribus-scarborough-baselines-2024",
+  "ap-scarborough-baselines-2024",
+  "georgetown-three-warfares-scs-2018",
+  "usni-three-warfares-2021",
+  "sari-maritime-incidents-law-enforcement-2024",
+  "pca-final-award-2016",
+  "lawfare-tribunal-award-2016",
+  "china-position-paper-2014",
+  "china-critical-study-2024",
+  "china-philippines-maritime-zones-act-statement-2024",
+  "china-un-note-cml17-2009",
+  "china-un-note-cml8-2011",
+  "china-un-note-cml42-2020",
+  "china-coast-guard-law-2021",
+  "philippines-maritime-zones-act-2024",
+  "philippines-baselines-ra-9522",
+  "malaysia-clcs-2019",
+  "malaysia-vietnam-joint-clcs-2009",
+  "us-state-lis-150",
+  "asean-doc-2002"
+]);
+
+const sourceLookup = new Map(sources.map((source) => [source.id, source]));
+const pickSources = (ids: string[]) =>
+  ids.map((id) => sourceLookup.get(id)).filter((source): source is (typeof sources)[number] => Boolean(source));
+
+const sortByYearDesc = (items: typeof sources) =>
+  [...items].sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+
+const lawfareSources = sortByYearDesc(
+  sources.filter((source) => source.topics.includes("Lawfare") || lawfareSourceIds.has(source.id))
+);
+
+const primaryMaterials = lawfareSources.filter((source) => source.primarySource).length;
+const analyticalMaterials = lawfareSources.length - primaryMaterials;
+const onlineDiscussions = lawfareSources.filter((source) =>
+  ["Blog Analysis", "Commentary", "News"].includes(source.sourceType)
+).length;
+
+const frames = [
+  {
+    title: "Strategic litigation and adjudication",
+    instrument: "UNCLOS Annex VII arbitration, jurisdictional objections, amicus-like scholarship, compliance diplomacy.",
+    function:
+      "Translate an asymmetric maritime contest into questions of jurisdiction, entitlement, evidence, and legal compliance."
+  },
+  {
+    title: "Legal counter-narratives",
+    instrument: "Position papers, white papers, critical studies, official statements, scholarly campaigns.",
+    function:
+      "Contest a tribunal, recast the applicable law, and persuade third states that one legal interpretation is the more legitimate baseline."
+  },
+  {
+    title: "Domestic-law codification",
+    instrument: "Baselines, maritime zones laws, coast guard laws, fishing bans, nature reserves, administrative measures.",
+    function:
+      "Convert an external claim into domestic authority that can be repeated by agencies, courts, maps, patrol notices, and enforcement bodies."
+  },
+  {
+    title: "Jurisdictional performance at sea",
+    instrument: "Coast guard patrols, fisheries enforcement, survey restrictions, resupply obstruction, safety warnings.",
+    function:
+      "Make a legal claim operational without crossing the threshold of open armed conflict, often by presenting coercion as law enforcement."
+  },
+  {
+    title: "Operational assertions of rights",
+    instrument: "FONOPs, military surveys, navigation and overflight statements, alliance statements, legal reports.",
+    function:
+      "Prevent excessive claims from hardening into practice by physically and diplomatically asserting navigation rights."
+  },
+  {
+    title: "Information and cognitive warfare",
+    instrument: "Legal slogans, media narratives, selective legal translation, expert conferences, three-warfares framing.",
+    function:
+      "Shape the audience before the legal merits are reached: domestic publics, ASEAN elites, shipping interests, allies, and non-party states."
+  }
+];
+
+const actorMatrix = [
+  {
+    actor: "China (PRC)",
+    instruments:
+      "Nine-dash line, Nanhai Zhudao/Four Sha language, UN notes, 2014 jurisdiction paper, 2016 award rejection, 2024 critical study, Coast Guard Law, Scarborough baselines.",
+    objective:
+      "Normalize expansive jurisdiction, preserve ambiguity where useful, delegitimize the 2016 award, and convert maritime claims into domestic enforcement practice.",
+    materials: pickSources([
+      "china-position-paper-2014",
+      "china-critical-study-2024",
+      "china-coast-guard-law-2021",
+      "china-un-note-cml42-2020",
+      "ku-mirasola-four-sha-2017"
+    ])
+  },
+  {
+    actor: "Philippines",
+    instruments:
+      "2013 arbitration, 2016 award diplomacy, public anniversary statements, maritime zones legislation, protests against Chinese baselines and enforcement.",
+    objective:
+      "Use law to clarify maritime entitlements, internationalize compliance pressure, and reduce the strategic value of ambiguous or excessive claims.",
+    materials: pickSources([
+      "pca-final-award-2016",
+      "de-castro-philippines-lawfare-2017",
+      "philippines-maritime-zones-act-2024",
+      "blue-security-lawfare-2024",
+      "ap-scarborough-baselines-2024"
+    ])
+  },
+  {
+    actor: "Vietnam",
+    instruments:
+      "Diplomatic notes, protests against fishing bans and survey interference, preservation of litigation options, CLCS practice with Malaysia.",
+    objective:
+      "Protect EEZ and continental shelf interests while keeping legal escalation available as leverage in a wider bargaining environment.",
+    materials: pickSources([
+      "dutton-vietnam-litigation-lawfare-2020",
+      "malaysia-vietnam-joint-clcs-2009",
+      "blue-security-lawfare-2024",
+      "pande-fishing-bans-opinio-2022"
+    ])
+  },
+  {
+    actor: "Malaysia, Brunei, Indonesia",
+    instruments:
+      "CLCS submissions, quiet diplomatic notes, EEZ enforcement, UNCLOS-based public statements, and selective avoidance of sovereignty framing.",
+    objective:
+      "Preserve legal entitlements without unnecessary escalation and keep the dispute framed around maritime zones rather than acceptance of another state's historic-rights theory.",
+    materials: pickSources([
+      "malaysia-clcs-2019",
+      "blue-security-lawfare-2024",
+      "iseas-lawfare-2023"
+    ])
+  },
+  {
+    actor: "United States and external maritime powers",
+    instruments:
+      "Limits in the Seas reports, FONOPs, legal statements on excessive maritime claims, alliance diplomacy, naval presence.",
+    objective:
+      "Reject excessive claims, maintain navigation and overflight freedoms, and support a legal order in which UNCLOS allocations constrain maritime coercion.",
+    materials: pickSources([
+      "us-state-lis-150",
+      "wirth-schatz-scs-lawfare-2020",
+      "marcinskas-us-prc-lawfare-2025",
+      "goldenziel-law-battlefield-2021"
+    ])
+  }
+];
+
+const dossiers = [
+  {
+    title: "From nine-dash line to Nanhai Zhudao and Four Sha",
+    legalMove:
+      "Ambiguous historic-rights language is supplemented by island-group, outlying-archipelago, baseline, and general-international-law arguments.",
+    strategicUse:
+      "The claim can survive critique by shifting form: if one formulation loses credibility, another preserves a large maritime space as politically contestable.",
+    risk:
+      "The legal category can become unstable. Ambiguity may deter other states in the short term but weakens legal predictability and invites counter-lawfare.",
+    sourceIds: [
+      "iseas-lawfare-2023",
+      "china-un-note-cml42-2020",
+      "ku-mirasola-four-sha-2017",
+      "us-state-lis-150"
+    ]
+  },
+  {
+    title: "The 2013-2016 arbitration as strategic litigation",
+    legalMove:
+      "The Philippines avoided asking the tribunal to decide sovereignty or delimit boundaries and instead requested rulings on maritime entitlements, historic rights, feature status, and conduct.",
+    strategicUse:
+      "A weaker naval actor used a legal forum to produce authoritative clarification and raise reputational costs for continued enforcement of excessive claims.",
+    risk:
+      "An award without direct enforcement may be dismissed as symbolism, but it can still reshape diplomatic notes, national legislation, alliance policy, and commercial risk assessment.",
+    sourceIds: [
+      "pca-final-award-2016",
+      "lawfare-tribunal-award-2016",
+      "de-castro-philippines-lawfare-2017",
+      "ku-opinio-lawfare-deter-china-2014"
+    ]
+  },
+  {
+    title: "Delegitimizing the tribunal and re-litigating in public",
+    legalMove:
+      "China (PRC) rejected jurisdiction, declined participation, issued position papers and white papers, and later sponsored or circulated extended critical studies.",
+    strategicUse:
+      "The legal campaign tries to reduce the award's authority among third states, domestic audiences, and regional elites while maintaining China's position that direct negotiation is the proper path.",
+    risk:
+      "Counter-narrative can become misuse when it turns settled procedural obligations into a claim that adverse rulings may simply be ignored.",
+    sourceIds: [
+      "china-position-paper-2014",
+      "china-critical-study-2024",
+      "liu-opinio-lawfare-over-scs-2016",
+      "talmon-jurisdictional-rubicon"
+    ]
+  },
+  {
+    title: "Domestic law, baselines, and rapid claim-counterclaim cycles",
+    legalMove:
+      "The Philippines enacted a Maritime Zones Act in 2024; China (PRC) responded by announcing Scarborough Shoal baselines and objecting to the Philippine statutes.",
+    strategicUse:
+      "Domestic legislation and baseline coordinates turn a diplomatic dispute into administrable claims that agencies can cite in enforcement, mapping, and protest.",
+    risk:
+      "If domestic law overstates international entitlement, it can become an escalation tool dressed as compliance.",
+    sourceIds: [
+      "philippines-maritime-zones-act-2024",
+      "china-philippines-maritime-zones-act-statement-2024",
+      "demaribus-scarborough-baselines-2024",
+      "ap-scarborough-baselines-2024"
+    ]
+  },
+  {
+    title: "Coast guard law enforcement as gray-zone jurisdiction",
+    legalMove:
+      "Coast guard statutes, patrol notices, fishing bans, and safety warnings frame coercive activity as maritime rights-protection and ordinary law enforcement.",
+    strategicUse:
+      "Law enforcement language can avoid the political cost of military escalation while still denying access, disrupting fishing, or deterring hydrocarbon activity.",
+    risk:
+      "The line between policing and force becomes blurred, especially when vessels ram, block, water-cannon, or operate alongside maritime militia.",
+    sourceIds: [
+      "china-coast-guard-law-2021",
+      "sari-maritime-incidents-law-enforcement-2024",
+      "ajil-prc-gray-zone-lawfare-2022",
+      "pande-fishing-bans-opinio-2022"
+    ]
+  },
+  {
+    title: "Freedom of navigation and counter-lawfare",
+    legalMove:
+      "External maritime powers publish legal analyses and conduct operations to reject excessive claims to territorial seas, straight baselines, or coastal-state control over foreign military activity.",
+    strategicUse:
+      "A legal position is made credible by repeated operational practice, not only by diplomatic statements.",
+    risk:
+      "Operations designed to defend law can be received as military signaling, making the law-politics distinction harder to sustain.",
+    sourceIds: [
+      "us-state-lis-150",
+      "wirth-schatz-scs-lawfare-2020",
+      "guilfoyle-lawfare-rule-of-law-2019",
+      "marcinskas-us-prc-lawfare-2025"
+    ]
+  },
+  {
+    title: "Three warfares and legal narratives",
+    legalMove:
+      "Legal arguments are coordinated with public-opinion and psychological messaging, including claims of lawful administration, defensive enforcement, and foreign provocation.",
+    strategicUse:
+      "Legal vocabulary becomes part of a wider cognitive campaign: it tells audiences what conduct should appear normal, lawful, or illegitimate.",
+    risk:
+      "The law is reduced to narrative ammunition if the underlying interpretation is detached from treaty text, evidence, or good-faith procedure.",
+    sourceIds: [
+      "georgetown-three-warfares-scs-2018",
+      "usni-three-warfares-2021",
+      "goldenziel-law-battlefield-2021",
+      "iseas-lawfare-2023"
+    ]
+  }
+];
+
+const materialColumns = [
+  {
+    title: "Academic publications",
+    text:
+      "Peer-reviewed and scholarly works define the concept, warn against overuse, and test whether legal argument constrains maritime security behavior.",
+    ids: [
+      "guilfoyle-lawfare-rule-of-law-2019",
+      "hsiao-china-lawfare-2016",
+      "seo-power-shift-lawfare-2024",
+      "sari-maritime-incidents-law-enforcement-2024"
+    ]
+  },
+  {
+    title: "Reports and policy studies",
+    text:
+      "Think-tank and institutional reports connect legal claims to operational behavior, maritime coercion, freedom of navigation, and regional risk.",
+    ids: [
+      "iseas-lawfare-2023",
+      "wirth-schatz-scs-lawfare-2020",
+      "blue-security-lawfare-2024",
+      "us-state-lis-150"
+    ]
+  },
+  {
+    title: "Online legal discussions",
+    text:
+      "Lawfare, Opinio Juris, Lowy, and law-of-the-sea blogs show how legal arguments are debated in near-real time as state practice changes.",
+    ids: [
+      "ku-mirasola-four-sha-2017",
+      "dutton-vietnam-litigation-lawfare-2020",
+      "liu-opinio-lawfare-over-scs-2016",
+      "demaribus-scarborough-baselines-2024"
+    ]
+  },
+  {
+    title: "News and state practice",
+    text:
+      "News reports and official documents capture the sequence by which law is operationalized: statutes, baselines, diplomatic protests, patrols, and public statements.",
+    ids: [
+      "ap-scarborough-baselines-2024",
+      "philippines-maritime-zones-act-2024",
+      "china-philippines-maritime-zones-act-statement-2024",
+      "china-coast-guard-law-2021"
+    ]
+  }
+];
+---
+
+<BaseLayout
+  title="Lawfare"
+  description="Strategic uses and misuses of law, legal argument, and legal institutions in the South China Sea disputes."
+>
+  <PageLead
+    eyebrow="Strategic legal contestation"
+    title="Lawfare in the South China Sea disputes"
+    text="This page explains how states use law, legal principles, institutions, national legislation, and legal narratives to pursue political, military, and strategic objectives in the South China Sea. It treats lawfare as a contested concept: some uses of law clarify rights and constrain coercion, while other uses exploit ambiguity, misstate legal rules, or convert law into cover for pressure."
+  />
+
+  <section class="metric-row lawfare-metrics" aria-label="Lawfare source counts">
+    <div>
+      <strong>{lawfareSources.length}</strong>
+      <span>lawfare-linked materials</span>
+    </div>
+    <div>
+      <strong>{primaryMaterials}</strong>
+      <span>primary legal and official records</span>
+    </div>
+    <div>
+      <strong>{analyticalMaterials}</strong>
+      <span>reports, scholarship, commentary, news</span>
+    </div>
+    <div>
+      <strong>{onlineDiscussions}</strong>
+      <span>online discussions and news items</span>
+    </div>
+  </section>
+
+  <section class="content-grid lawfare-definition">
+    <article class="text-panel">
+      <h2>Working definition</h2>
+      <p>
+        In this portal, lawfare means the strategic use or misuse of law, legal institutions, legal argument,
+        and law-like procedures to obtain operational, political, diplomatic, or military advantage. It can
+        include litigation, official legal opinions, domestic legislation, baselines, diplomatic notes,
+        maritime-law enforcement, and legal messaging.
+      </p>
+      <p>
+        The key analytical question is not simply whether a state uses law strategically. All serious diplomacy
+        does that. The sharper question is whether the legal move clarifies rights and channels disputes into
+        lawful settlement, or whether it exploits ambiguity, contests settled procedures in bad faith, or
+        launders coercive conduct through legal vocabulary.
+      </p>
+    </article>
+    <aside class="note-panel">
+      <h2>Analytical guardrails</h2>
+      <ul>
+        <li>Do not treat every legal move as wrongful merely because it has strategic effects.</li>
+        <li>Separate claims about land sovereignty from maritime entitlements under UNCLOS.</li>
+        <li>Ask whether domestic law tracks international law or attempts to override it.</li>
+        <li>Track audience: tribunal, domestic public, ASEAN, allies, investors, coast guards, navies.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Analytical map</p>
+        <h2>Six recurring forms of South China Sea lawfare</h2>
+      </div>
+    </div>
+    <div class="framework-grid">
+      {frames.map((frame) => (
+        <article class="brief-card">
+          <span>{frame.title}</span>
+          <h3>Instrument</h3>
+          <p>{frame.instrument}</p>
+          <h3>Strategic function</h3>
+          <p>{frame.function}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Actors and instruments</p>
+        <h2>How lawfare appears in claimant and stakeholder practice</h2>
+      </div>
+    </div>
+    <div class="lawfare-actor-list">
+      {actorMatrix.map((row) => (
+        <article class="lawfare-actor-card">
+          <div>
+            <h3>{row.actor}</h3>
+            <p>{row.instruments}</p>
+          </div>
+          <div>
+            <strong>Strategic objective</strong>
+            <p>{row.objective}</p>
+          </div>
+          <div class="lawfare-source-links">
+            {row.materials.map((source) => (
+              <a href={source.url} target="_blank" rel="noreferrer">
+                {source.title}
+              </a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band lawfare-dossier-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Demonstration dossiers</p>
+        <h2>Concrete examples showing legal strategy and legal misuse</h2>
+      </div>
+    </div>
+    <div class="lawfare-dossier-list">
+      {dossiers.map((dossier) => (
+        <article class="lawfare-dossier">
+          <h3>{dossier.title}</h3>
+          <dl>
+            <div>
+              <dt>Legal move</dt>
+              <dd>{dossier.legalMove}</dd>
+            </div>
+            <div>
+              <dt>Strategic use</dt>
+              <dd>{dossier.strategicUse}</dd>
+            </div>
+            <div>
+              <dt>Misuse risk</dt>
+              <dd>{dossier.risk}</dd>
+            </div>
+          </dl>
+          <div class="lawfare-source-links">
+            {pickSources(dossier.sourceIds).map((source) => (
+              <a href={source.url} target="_blank" rel="noreferrer">
+                {source.sourceType}: {source.title}
+              </a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Material types</p>
+        <h2>Where the evidence sits</h2>
+      </div>
+    </div>
+    <div class="material-map">
+      {materialColumns.map((column) => (
+        <article class="material-column">
+          <h3>{column.title}</h3>
+          <p>{column.text}</p>
+          <div class="lawfare-source-links">
+            {pickSources(column.ids).map((source) => (
+              <a href={source.url} target="_blank" rel="noreferrer">
+                {source.title}
+              </a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band literature-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Searchable library</p>
+        <h2>Lawfare materials, official anchors, reports, scholarship, blogs, and news</h2>
+      </div>
+      <a href={`${import.meta.env.BASE_URL}library/`}>Open full library</a>
+    </div>
+    <ResourceExplorer resources={lawfareSources} compact />
+  </section>
+</BaseLayout>

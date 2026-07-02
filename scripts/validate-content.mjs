@@ -72,6 +72,7 @@ const expectedRoutes = [
   "claimants.astro",
   "china.astro",
   "literature.astro",
+  "lawfare.astro",
   "reports.astro",
   "library.astro"
 ];

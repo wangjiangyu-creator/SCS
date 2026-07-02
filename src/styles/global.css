@@ -578,6 +578,96 @@ main {
   font-weight: 900;
 }
 
+.lawfare-definition .text-panel p {
+  max-width: 86ch;
+}
+
+.lawfare-actor-list,
+.lawfare-dossier-list,
+.material-map {
+  display: grid;
+  gap: 1rem;
+}
+
+.lawfare-actor-card,
+.lawfare-dossier,
+.material-column {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.1rem;
+}
+
+.lawfare-actor-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(260px, 0.9fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.lawfare-actor-card h3,
+.lawfare-dossier h3,
+.material-column h3 {
+  color: var(--navy);
+}
+
+.lawfare-actor-card p,
+.lawfare-dossier dd,
+.material-column p {
+  color: var(--muted);
+}
+
+.lawfare-actor-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--red);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.lawfare-dossier-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lawfare-dossier dl {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lawfare-dossier dl div {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 0.9rem;
+}
+
+.lawfare-dossier dt {
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.lawfare-dossier dd {
+  margin: 0;
+}
+
+.lawfare-source-links {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.lawfare-source-links a {
+  color: var(--ink);
+  font-size: 0.9rem;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.material-map {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .matrix {
   display: grid;
   gap: 0.8rem;
@@ -813,7 +903,10 @@ main {
   .split-section,
   .matrix-row,
   .claimant-profile-list,
-  .china-overview-grid {
+  .china-overview-grid,
+  .lawfare-actor-card,
+  .lawfare-dossier-list,
+  .material-map {
     grid-template-columns: 1fr;
   }
 
@@ -881,7 +974,8 @@ main {
   }
 
   .issue-deep-card,
-  .china-timeline article {
+  .china-timeline article,
+  .lawfare-dossier dl div {
     grid-template-columns: 1fr;
   }
 
