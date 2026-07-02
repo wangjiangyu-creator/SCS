@@ -24,3 +24,5 @@ Run `pnpm validate` after source updates.
 ## Deployment
 
 The site deploys to GitHub Pages from `main` through `.github/workflows/deploy.yml`.
+
+Public URL: https://scs.eastlaw.wang/

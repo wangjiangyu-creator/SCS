@@ -1,8 +1,6 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://wangjiangyu-creator.github.io",
-  base: "/SCS",
+  site: "https://scs.eastlaw.wang",
   output: "static"
 });
-
