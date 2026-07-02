@@ -6,6 +6,7 @@ export const navItems = [
   { href: "arbitration/", label: "Arbitration" },
   { href: "claimants/", label: "Claimants" },
   { href: "china/", label: "China" },
+  { href: "literature/", label: "Literature" },
   { href: "reports/", label: "Reports" },
   { href: "library/", label: "Library" }
 ];

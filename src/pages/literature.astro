@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+
+const literatureTypes = new Set([
+  "Academic Publication",
+  "Book",
+  "Book Chapter",
+  "Journal Article",
+  "Legal Study",
+  "Thesis",
+  "Working Paper"
+]);
+
+const sortByYearDesc = (items: typeof sources) =>
+  [...items].sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+
+const literatureSources = sources.filter(
+  (source) => source.topics.includes("Literature") || literatureTypes.has(source.sourceType)
+);
+
+const chineseWorks = sortByYearDesc(
+  literatureSources.filter((source) => source.topics.includes("Chinese works"))
+);
+
+const englishWorks = sortByYearDesc(
+  literatureSources.filter((source) => !source.topics.includes("Chinese works"))
+);
+
+const books = literatureSources.filter((source) => source.sourceType === "Book").length;
+const articlesAndPapers = literatureSources.filter((source) =>
+  ["Academic Publication", "Journal Article", "Working Paper", "Legal Study"].includes(source.sourceType)
+).length;
+---
+
+<BaseLayout
+  title="Literature"
+  description="Academic literature on the South China Sea disputes, divided into English works and Chinese works."
+>
+  <PageLead
+    eyebrow="Academic literature"
+    title="Books, journal articles, chapters, working papers, and legal studies on the South China Sea disputes."
+    text="This page separates English works and Chinese works while keeping both sets connected to the searchable source library. It includes legal, historical, geopolitical, policy, and dispute-settlement scholarship."
+  />
+
+  <section class="metric-row literature-metrics" aria-label="Literature counts">
+    <div>
+      <strong>{englishWorks.length}</strong>
+      <span>English works</span>
+    </div>
+    <div>
+      <strong>{chineseWorks.length}</strong>
+      <span>Chinese works</span>
+    </div>
+    <div>
+      <strong>{books}</strong>
+      <span>Books and edited volumes</span>
+    </div>
+    <div>
+      <strong>{articlesAndPapers}</strong>
+      <span>Articles, papers, and studies</span>
+    </div>
+  </section>
+
+  <section class="section-band literature-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">English works</p>
+        <h2>English-language scholarship and research literature</h2>
+      </div>
+      <a href={`${import.meta.env.BASE_URL}library/`}>Open full library</a>
+    </div>
+    <ResourceExplorer resources={englishWorks} compact />
+  </section>
+
+  <section class="section-band literature-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Chinese works</p>
+        <h2>中文学术文献与研究成果</h2>
+      </div>
+      <a href={`${import.meta.env.BASE_URL}library/`}>Open full library</a>
+    </div>
+    <ResourceExplorer resources={chineseWorks} compact />
+  </section>
+</BaseLayout>
