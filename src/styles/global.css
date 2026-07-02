@@ -100,6 +100,8 @@ main {
 .content-grid,
 .issue-deep-list,
 .claimant-profile-list,
+.china-overview-grid,
+.china-section,
 .resource-explorer {
   width: min(1180px, calc(100% - 32px));
   margin-inline: auto;
@@ -433,6 +435,149 @@ main {
   color: var(--muted);
 }
 
+.china-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+}
+
+.china-intro {
+  padding: 1.2rem;
+}
+
+.china-intro p {
+  max-width: 86ch;
+}
+
+.china-intro p[lang="zh-Hans"],
+.bilingual-card p[lang="zh-Hans"],
+.legal-node p[lang="zh-Hans"],
+.china-timeline p[lang="zh-Hans"] {
+  color: var(--ink);
+}
+
+.china-intro p[lang="en"],
+.bilingual-card p[lang="en"],
+.legal-node p[lang="en"],
+.china-timeline p[lang="en"] {
+  color: var(--muted);
+}
+
+.china-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.china-metrics div {
+  min-height: 92px;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f7f4ee;
+}
+
+.china-metrics strong {
+  display: block;
+  color: var(--navy);
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.china-metrics span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.official-gateways h2 {
+  font-size: 1.25rem;
+}
+
+.official-gateways li + li {
+  margin-top: 0.8rem;
+}
+
+.official-gateways a {
+  display: grid;
+  gap: 0.15rem;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.official-gateways a span,
+.official-gateways small {
+  display: block;
+  color: var(--muted);
+}
+
+.china-card-grid,
+.legal-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.bilingual-card,
+.legal-node,
+.china-timeline article {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.1rem;
+}
+
+.bilingual-card h3,
+.legal-node h3,
+.china-timeline time {
+  color: var(--navy);
+}
+
+.bilingual-card h4,
+.legal-node h4 {
+  margin: 1rem 0 0.45rem;
+  color: var(--sea);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.bilingual-card.compact {
+  min-height: 260px;
+}
+
+.legal-node {
+  display: grid;
+  align-content: start;
+}
+
+.legal-node span {
+  width: max-content;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--red);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.china-timeline {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.china-timeline article {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.china-timeline time {
+  font-weight: 900;
+}
+
 .matrix {
   display: grid;
   gap: 0.8rem;
@@ -667,7 +812,8 @@ main {
   .content-grid,
   .split-section,
   .matrix-row,
-  .claimant-profile-list {
+  .claimant-profile-list,
+  .china-overview-grid {
     grid-template-columns: 1fr;
   }
 
@@ -679,7 +825,9 @@ main {
   .issue-grid,
   .framework-grid,
   .finding-list,
-  .resource-grid {
+  .resource-grid,
+  .china-card-grid,
+  .legal-timeline-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -693,6 +841,14 @@ main {
 
   .map-panel img {
     height: 420px;
+  }
+
+  .china-timeline article {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .china-timeline article p[lang="en"] {
+    grid-column: 2;
   }
 }
 
@@ -716,13 +872,21 @@ main {
   .framework-grid,
   .finding-list,
   .resource-grid,
+  .china-card-grid,
+  .legal-timeline-grid,
+  .china-metrics,
   .timeline,
   .toolbar {
     grid-template-columns: 1fr;
   }
 
-  .issue-deep-card {
+  .issue-deep-card,
+  .china-timeline article {
     grid-template-columns: 1fr;
+  }
+
+  .china-timeline article p[lang="en"] {
+    grid-column: auto;
   }
 
   .map-panel img {

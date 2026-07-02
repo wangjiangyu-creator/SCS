@@ -1,0 +1,351 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageLead from "../components/PageLead.astro";
+import ResourceExplorer from "../components/ResourceExplorer.astro";
+import sources from "../data/sources.json";
+
+const chinaSources = sources.filter(
+  (source) =>
+    source.claimants.includes("China (PRC)") ||
+    source.topics.includes("China policy") ||
+    source.jurisdiction === "China (PRC)"
+);
+
+const primaryChinaSources = chinaSources.filter((source) => source.primarySource).length;
+
+const officialGateways = [
+  {
+    zh: "中国外交部边界与海洋事务司",
+    en: "MFA Department of Boundary and Ocean Affairs",
+    tag: "政策与活动 / Policy and activities",
+    url: "https://www.fmprc.gov.cn/eng/wjb/zzjg_663340/bianhaisi_eng_665278/"
+  },
+  {
+    zh: "中国外交部边海政策与法律立场",
+    en: "MFA policy and legal position archive",
+    tag: "官方声明 / Official statements",
+    url: "https://www.fmprc.gov.cn/eng/wjb/zzjg_663340/bianhaisi_eng_665278/plpbo/"
+  },
+  {
+    zh: "联合国海洋法司：中国国家资料页",
+    en: "UN DOALOS China state file",
+    tag: "法律与声明 / Laws and declarations",
+    url: "https://www.un.org/depts/los/LEGISLATIONANDTREATIES/STATEFILES/CHN.htm"
+  },
+  {
+    zh: "中国海警局",
+    en: "China Coast Guard",
+    tag: "执法实践 / Law-enforcement practice",
+    url: "https://www.ccg.gov.cn/"
+  }
+];
+
+const policyPillars = [
+  {
+    zhTitle: "主权叙事：南海诸岛",
+    enTitle: "Sovereignty narrative: Nanhai Zhudao",
+    zh:
+      "中国（PRC）的官方立场以“南海诸岛”为核心概念，主张东沙群岛、西沙群岛、中沙群岛和南沙群岛及其相关海域构成中国在南海的领土主权和海洋权益基础。",
+    en:
+      "China (PRC) frames its position around Nanhai Zhudao: Dongsha, Xisha, Zhongsha, and Nansha island groups are presented as the territorial and maritime-rights basis for its South China Sea claims."
+  },
+  {
+    zhTitle: "海洋权利：内水、领海、毗连区、专属经济区、大陆架与历史性权利",
+    enTitle: "Maritime rights: internal waters, territorial sea, EEZ, shelf, and historic rights",
+    zh:
+      "官方文件通常把岛礁主权、基于岛礁的海域权利、以及历史性权利并列陈述；这也是与2016年仲裁裁决及其他沿岸国主张发生冲突的法律核心。",
+    en:
+      "Official documents usually combine sovereignty over features, maritime entitlements generated from those features, and historic rights. This is the core legal point contested by the 2016 award and other coastal-state positions."
+  },
+  {
+    zhTitle: "争端解决：直接谈判、搁置争议、共同开发",
+    enTitle: "Dispute settlement: direct negotiation, shelving disputes, joint development",
+    zh:
+      "中国（PRC）强调由“直接有关国家”通过谈判协商解决领土与海洋划界争端，在最终解决前通过规则、机制和务实合作管控分歧。",
+    en:
+      "China (PRC) emphasizes negotiation and consultation by directly concerned states, with rule-making, mechanisms, and practical cooperation used to manage disputes before final settlement."
+  },
+  {
+    zhTitle: "区域秩序：DOC、COC与反对域外介入",
+    enTitle: "Regional order: DOC, COC, and opposition to external intervention",
+    zh:
+      "中国（PRC）把《南海各方行为宣言》（DOC）和“南海行为准则”（COC）磋商作为区域管控框架，同时反对域外力量以航行自由、同盟合作或仲裁裁决为由介入争端。",
+    en:
+      "China (PRC) treats the DOC and COC consultations as the regional management framework, while opposing external involvement through freedom-of-navigation operations, alliance coordination, or reliance on the arbitral award."
+  }
+];
+
+const legalArchitecture = [
+  {
+    year: "1958",
+    zhTitle: "领海声明",
+    enTitle: "Territorial sea declaration",
+    zh:
+      "1958年领海声明把12海里领海制度适用于中国大陆、沿海岛屿以及东沙、西沙、中沙、南沙等岛屿，是中国（PRC）后来法律叙事中的早期基础。",
+    en:
+      "The 1958 territorial sea declaration applied the 12-nautical-mile territorial sea system to the mainland, coastal islands, and the Dongsha, Xisha, Zhongsha, and Nansha groups, forming an early PRC legal anchor."
+  },
+  {
+    year: "1992",
+    zhTitle: "《领海及毗连区法》",
+    enTitle: "Territorial Sea and Contiguous Zone Law",
+    zh:
+      "1992年法律规定领海、毗连区和外国军用船舶进入领海许可等制度，并将南海岛屿列入中国（PRC）的领土表述。",
+    en:
+      "The 1992 law sets out territorial sea and contiguous zone rules, including authorization language for foreign military vessels entering the territorial sea, and lists South China Sea island groups in the PRC territorial formulation."
+  },
+  {
+    year: "1996",
+    zhTitle: "西沙群岛领海基线",
+    enTitle: "Xisha territorial sea baselines",
+    zh:
+      "1996年中国（PRC）公布部分大陆领海基线和西沙群岛领海基线，同时全国人大常委会批准加入《联合国海洋法公约》。",
+    en:
+      "In 1996 China (PRC) announced part of its mainland baselines and baselines around Xisha Qundao, and the NPC Standing Committee approved ratification of UNCLOS."
+  },
+  {
+    year: "1998",
+    zhTitle: "《专属经济区和大陆架法》",
+    enTitle: "EEZ and Continental Shelf Act",
+    zh:
+      "1998年法律建立专属经济区与大陆架制度，并保留中国（PRC）主张的历史性权利，这一条款在后续南海法律争论中频繁出现。",
+    en:
+      "The 1998 act creates China (PRC)'s EEZ and continental shelf framework and preserves claimed historic rights, a provision repeatedly invoked in South China Sea legal debates."
+  },
+  {
+    year: "2006",
+    zhTitle: "《海洋法公约》第298条排除性声明",
+    enTitle: "UNCLOS Article 298 optional exceptions",
+    zh:
+      "中国（PRC）根据第298条排除海洋划界、历史性湾或历史性所有权、军事活动、执法活动等争端的强制程序；这是其反对菲律宾仲裁管辖权的程序性支柱。",
+    en:
+      "China (PRC)'s Article 298 declaration excludes compulsory procedures for disputes concerning maritime delimitation, historic bays or titles, military activities, and law-enforcement activities. It is a procedural pillar of its objection to the Philippines arbitration."
+  },
+  {
+    year: "2021",
+    zhTitle: "《海警法》",
+    enTitle: "Coast Guard Law",
+    zh:
+      "2021年《海警法》把海上维权执法、资源开发利用、生态环境、渔业作业、犯罪侦查和武器警械使用纳入统一的海警法制框架。",
+    en:
+      "The 2021 Coast Guard Law places maritime rights-protection enforcement, resource use, environmental protection, fisheries activity, criminal investigation, and use-of-force rules within a unified coast guard framework."
+  }
+];
+
+const timeline = [
+  {
+    date: "2009",
+    zh: "向联合国秘书长提交CML/17/2009照会，反对马来西亚和越南大陆架外部界限联合提交，并附上传统上与断续线主张相关的地图。",
+    en:
+      "Submitted Note Verbale CML/17/2009 to the UN Secretary-General objecting to the Malaysia-Viet Nam CLCS submission and attaching the map associated with the dashed-line claim."
+  },
+  {
+    date: "2011",
+    zh: "CML/8/2011照会回应菲律宾，主张南沙群岛整体及相关海域权利，并把《领海及毗连区法》和《专属经济区和大陆架法》作为国内法基础。",
+    en:
+      "Note CML/8/2011 responded to the Philippines, asserting rights over Nansha Islands and relevant waters and invoking the 1992 and 1998 national maritime laws."
+  },
+  {
+    date: "2012",
+    zh: "设立三沙市及其行政机构，强化对西沙、中沙、南沙相关事务的国内行政管辖安排。",
+    en:
+      "Established Sansha City and related administrative organs, strengthening the domestic governance architecture for Xisha, Zhongsha, and Nansha-related affairs."
+  },
+  {
+    date: "2013-2016",
+    zh: "菲律宾启动仲裁后，中国（PRC）采取“不接受、不参与”立场，并通过2014年管辖权立场文件、2015年管辖权裁决声明、2016年最终裁决声明和白皮书系统回应。",
+    en:
+      "After the Philippines initiated arbitration, China (PRC) adopted a non-acceptance and non-participation position and responded through the 2014 position paper, 2015 jurisdiction statement, 2016 award statement, and 2016 white paper."
+  },
+  {
+    date: "2020",
+    zh: "CML/42/2020照会在马来西亚2019年大陆架提交背景下重述“南海诸岛”、基于岛群的海域权利和历史性权利。",
+    en:
+      "Note CML/42/2020, responding to Malaysia's 2019 CLCS submission, restated Nanhai Zhudao, maritime entitlements based on island groups, and historic rights."
+  },
+  {
+    date: "2024",
+    zh: "外交部就菲律宾《海洋区域法》和《群岛海道法》发表声明，反对菲律宾以国内法固化其海洋主张和2016年仲裁结果。",
+    en:
+      "MFA protested the Philippine Maritime Zones Act and Archipelagic Sea Lanes Act, opposing the use of domestic legislation to entrench Philippine maritime claims and the 2016 award."
+  },
+  {
+    date: "2025-2026",
+    zh: "外交部和中国海警继续通过王毅关于仲裁案的讲话、东盟-中国DOC会议、中菲海上事务对话、中马海上问题工作组、黄岩岛执法巡查等材料展示政策延续与国家实践。",
+    en:
+      "MFA and CCG materials in 2025-2026 show policy continuity through Wang Yi's arbitration remarks, ASEAN-China DOC meetings, China-Philippines maritime dialogue, China-Malaysia working group activity, and Huangyan Dao patrol notices."
+  }
+];
+
+const statePractice = [
+  {
+    zhTitle: "外交照会与抗议",
+    enTitle: "Diplomatic notes and protests",
+    zh:
+      "通过联合国照会、外交部声明、发言人答问和双边交涉，对大陆架提交、他国国内立法、海上事件及域外联合声明作出法律和政治回应。",
+    en:
+      "China (PRC) uses UN notes, MFA statements, spokesperson remarks, and bilateral démarches to respond to CLCS submissions, domestic legislation by other states, incidents at sea, and external joint statements."
+  },
+  {
+    zhTitle: "行政与命名实践",
+    enTitle: "Administration and naming practice",
+    zh:
+      "行政区划、岛礁命名、地图发布、海域功能安排和生态保护区叙事，构成其把主权主张转化为国内治理实践的路径。",
+    en:
+      "Administrative divisions, naming practices, maps, maritime functional arrangements, and ecological-protection narratives translate sovereignty claims into domestic governance practice."
+  },
+  {
+    zhTitle: "海警和渔业执法",
+    enTitle: "Coast guard and fisheries enforcement",
+    zh:
+      "中国海警以“维权执法”为核心术语，围绕黄岩岛、仁爱礁等争议区域发布巡查、驱离、救助、科考保障和生态保护信息。",
+    en:
+      "China Coast Guard uses the language of rights-protection law enforcement around areas such as Huangyan Dao and Ren'ai Jiao, publishing patrol, expulsion, rescue, scientific-survey protection, and ecological-protection notices."
+  },
+  {
+    zhTitle: "区域机制与风险管控",
+    enTitle: "Regional mechanisms and risk management",
+    zh:
+      "中国（PRC）继续把DOC落实、COC磋商、海上热线、双边海上问题对话和务实合作作为避免误判和展示区域主导权的制度工具。",
+    en:
+      "China (PRC) uses DOC implementation, COC talks, maritime hotlines, bilateral maritime dialogues, and practical cooperation as institutional tools for risk reduction and regional agenda-setting."
+  }
+];
+---
+
+<BaseLayout
+  title="China"
+  description="Bilingual Chinese-first page on China (PRC)'s South China Sea policies, laws, official statements, white papers, position papers, state practice, and related moves."
+>
+  <PageLead
+    eyebrow="中国 / China"
+    title="中国（PRC）南海政策、法律与国家实践 / China (PRC) policy, law, and state practice"
+    text="本页中文在前，并在同一页面提供英文说明，集中整理中国（PRC）围绕南海争端的政策主张、法律文件、官方声明、白皮书、立场文件、外交照会、海警执法和区域外交。 Chinese comes first on this page, with English in the same section for comparative reading."
+  />
+
+  <section class="china-overview-grid">
+    <article class="text-panel china-intro">
+      <p lang="zh-Hans">
+        本页采取研究门户的中立写法：先准确呈现中国（PRC）官方如何表述其主张，再把这些主张放入《联合国海洋法公约》、2016年仲裁、周边国家抗议、以及海上执法实践的争议结构中理解。
+      </p>
+      <p lang="en">
+        This page uses a neutral research format: it first records how China (PRC) states its own position, then situates those claims within UNCLOS, the 2016 arbitration, protests by neighboring states, and operational practice at sea.
+      </p>
+      <div class="china-metrics" aria-label="China page source metrics">
+        <div>
+          <strong>{chinaSources.length}</strong>
+          <span>中国相关资料 / China-related records</span>
+        </div>
+        <div>
+          <strong>{primaryChinaSources}</strong>
+          <span>一手资料 / primary sources</span>
+        </div>
+        <div>
+          <strong>1958-2026</strong>
+          <span>覆盖时段 / coverage period</span>
+        </div>
+      </div>
+    </article>
+    <aside class="note-panel official-gateways">
+      <h2>官方入口 / Official gateways</h2>
+      <ul>
+        {officialGateways.map((link) => (
+          <li>
+            <a href={link.url} target="_blank" rel="noreferrer">
+              <strong>{link.zh}</strong>
+              <span>{link.en}</span>
+            </a>
+            <small>{link.tag}</small>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section-band china-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">一、政策主张 / Policy Position</p>
+        <h2>中国（PRC）官方叙事的四个支柱</h2>
+      </div>
+    </div>
+    <div class="china-card-grid">
+      {policyPillars.map((item) => (
+        <article class="bilingual-card">
+          <h3 lang="zh-Hans">{item.zhTitle}</h3>
+          <p lang="zh-Hans">{item.zh}</p>
+          <h4>{item.enTitle}</h4>
+          <p lang="en">{item.en}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band china-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">二、法律与程序基础 / Legal Architecture</p>
+        <h2>从领海声明到海警执法法制</h2>
+      </div>
+    </div>
+    <div class="legal-timeline-grid">
+      {legalArchitecture.map((item) => (
+        <article class="legal-node">
+          <span>{item.year}</span>
+          <h3 lang="zh-Hans">{item.zhTitle}</h3>
+          <p lang="zh-Hans">{item.zh}</p>
+          <h4>{item.enTitle}</h4>
+          <p lang="en">{item.en}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band china-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">三、官方文件与关键行动 / Official Documents and Moves</p>
+        <h2>南海政策和国家实践时间线</h2>
+      </div>
+    </div>
+    <div class="china-timeline">
+      {timeline.map((item) => (
+        <article>
+          <time>{item.date}</time>
+          <p lang="zh-Hans">{item.zh}</p>
+          <p lang="en">{item.en}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band china-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">四、国家实践 / State Practice</p>
+        <h2>从法律主张到海上和外交行动</h2>
+      </div>
+    </div>
+    <div class="china-card-grid">
+      {statePractice.map((item) => (
+        <article class="bilingual-card compact">
+          <h3 lang="zh-Hans">{item.zhTitle}</h3>
+          <p lang="zh-Hans">{item.zh}</p>
+          <h4>{item.enTitle}</h4>
+          <p lang="en">{item.en}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band china-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">五、资料库 / Source Library</p>
+        <h2>中国（PRC）相关资料筛选</h2>
+      </div>
+      <a href={`${import.meta.env.BASE_URL}library/`}>Open full library</a>
+    </div>
+    <ResourceExplorer resources={chinaSources} compact />
+  </section>
+</BaseLayout>

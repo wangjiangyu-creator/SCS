@@ -70,6 +70,7 @@ const expectedRoutes = [
   "law.astro",
   "arbitration.astro",
   "claimants.astro",
+  "china.astro",
   "reports.astro",
   "library.astro"
 ];
@@ -87,4 +88,3 @@ if (errors.length > 0) {
 }
 
 console.log(`Validated ${sources.length} source records and ${expectedRoutes.length} routes.`);
-
