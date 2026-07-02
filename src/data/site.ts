@@ -11,7 +11,7 @@ export const navItems = [
 
 export const claimantProfiles = [
   {
-    name: "China",
+    name: "China (PRC)",
     role: "Claimant",
     color: "red",
     claim:
@@ -21,11 +21,11 @@ export const claimantProfiles = [
       "Rejects the jurisdiction and legal effect of the 2016 arbitral award while relying on sovereignty, historic rights, national legislation, and UNCLOS arguments."
   },
   {
-    name: "Taiwan/ROC",
+    name: "Taiwan",
     role: "Claimant",
     color: "gold",
     claim:
-      "Claims the South China Sea islands as part of the Republic of China and administers Taiping Island, also known as Itu Aba, in the Spratlys.",
+      "Claims the South China Sea islands and administers Taiping Island, also known as Itu Aba, in the Spratlys.",
     keyAreas: ["Taiping Island", "Spratly Islands", "Paracel Islands", "Pratas Island"],
     legalPosition:
       "Maintains island-sovereignty claims while recent policy language emphasizes UNCLOS, freedom of navigation, peaceful settlement, and inclusion in regional mechanisms."
@@ -78,7 +78,7 @@ export const claimantProfiles = [
       "Does not claim Spratly or Paracel sovereignty, but objects to maritime claims that overlap with its lawful EEZ and continental shelf around the Natuna Islands.",
     keyAreas: ["Natuna Islands", "North Natuna Sea", "EEZ enforcement"],
     legalPosition:
-      "Maintains that there is no territorial dispute with China in the Natuna area, while rejecting excessive maritime claims inconsistent with UNCLOS."
+      "Maintains that there is no territorial dispute with China (PRC) in the Natuna area, while rejecting excessive maritime claims inconsistent with UNCLOS."
   }
 ];
 
@@ -131,7 +131,7 @@ export const issueAreas = [
     title: "Crisis management and regional order",
     tag: "Diplomacy",
     summary:
-      "ASEAN-China diplomacy, confidence-building measures, incidents at sea, and the proposed Code of Conduct shape the dispute even when legal positions remain fixed.",
+      "ASEAN-China (PRC) diplomacy, confidence-building measures, incidents at sea, and the proposed Code of Conduct shape the dispute even when legal positions remain fixed.",
     questions: [
       "What practical effect does the 2002 Declaration on Conduct still have?",
       "Can a Code of Conduct reduce coercive conduct without settling sovereignty?",
@@ -149,7 +149,7 @@ export const legalFrameworks = [
   {
     title: "Part XV dispute settlement",
     text:
-      "Compulsory procedures under Part XV and Annex VII mattered because China did not participate but the tribunal still had to satisfy itself of jurisdiction and factual support."
+      "Compulsory procedures under Part XV and Annex VII mattered because China (PRC) did not participate but the tribunal still had to satisfy itself of jurisdiction and factual support."
   },
   {
     title: "ITLOS and procedural rules",
@@ -164,7 +164,7 @@ export const legalFrameworks = [
   {
     title: "Regional instruments",
     text:
-      "The ASEAN-China Declaration on Conduct and Code of Conduct negotiations frame political commitments on self-restraint, confidence building, and peaceful settlement."
+      "The ASEAN-China (PRC) Declaration on Conduct and Code of Conduct negotiations frame political commitments on self-restraint, confidence building, and peaceful settlement."
   }
 ];
 
